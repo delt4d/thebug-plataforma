@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: database
+    image: mysql:8.3.0
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./thebug.sql:/docker-entrypoint-initdb.d/01-thebug.sql
+      - ./seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+    environment:
+      MYSQL_DATABASE: thebug
+      MYSQL_USER: bug
+      MYSQL_PASSWORD: 1234
+      MYSQL_RANDOM_ROOT_PASSWORD: true
+
+  phpmyadmin:
+    container_name: php_my_admin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: bug
+      PMA_PASSWORD: 1234
+    depends_on:
+      - db
+
+  php:
+    container_name: apache
+    build: .
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+    links:
+      - db
+    stdin_open: true
+    tty: true
+
+volumes:
+  db_data:
+
+

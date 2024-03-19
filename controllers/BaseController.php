@@ -8,9 +8,9 @@ class BaseController
     private function getDB($bd = null, $host = null, $user = null, $password = null)
     {
         if ($bd == null) $bd = "thebug";
-        if ($user == null) $user = "root";
-        if ($password == null) $password = "";
-        if ($host == null) $host = "127.0.0.1";
+        if ($user == null) $user = "bug";
+        if ($password == null) $password = "1234";
+        if ($host == null) $host = "db";
 
         return new BancoDeDados($host, $user, $password, $bd);
     }
